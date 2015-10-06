@@ -4,7 +4,7 @@
 #
 Name     : backports.ssl_match_hostname
 Version  : 3.4.0.2
-Release  : 6
+Release  : 7
 URL      : https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz
 Source0  : https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz
 Summary  : The ssl.match_hostname() function from Python 3.4
