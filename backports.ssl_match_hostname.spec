@@ -6,9 +6,9 @@
 #
 Name     : backports.ssl_match_hostname
 Version  : 3.5.0.1
-Release  : 17
-URL      : https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
-Source0  : https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
+Release  : 18
+URL      : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
+Source0  : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
 Source99 : https://pypi.python.org/packages/source/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz.asc
 Summary  : The ssl.match_hostname() function from Python 3.5
 Group    : Development/Tools
@@ -22,7 +22,24 @@ BuildRequires : setuptools
 
 %description
 The ssl.match_hostname() function from Python 3.5
-=================================================
+        =================================================
+        
+        The Secure Sockets Layer is only actually *secure*
+        if you check the hostname in the certificate returned
+        by the server to which you are connecting,
+        and verify that it matches to hostname
+        that you are trying to reach.
+        
+        But the matching logic, defined in `RFC2818`_,
+        can be a bit tricky to implement on your own.
+        So the ``ssl`` package in the Standard Library of Python 3.2
+        and greater now includes a ``match_hostname()`` function
+        for performing this check instead of requiring every application
+        to implement the check separately.
+        
+        This backport brings ``match_hostname()`` to users
+        of earlier versions of Python.
+        Simply make this distribution a dependency of your package,
 
 %package python
 Summary: python components for the backports.ssl_match_hostname package.
@@ -36,20 +53,27 @@ python components for the backports.ssl_match_hostname package.
 %setup -q -n backports.ssl_match_hostname-3.5.0.1
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1484531294
+export SOURCE_DATE_EPOCH=1503072232
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
 %install
-export SOURCE_DATE_EPOCH=1484531294
+export SOURCE_DATE_EPOCH=1503072232
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
+echo ----[ mark ]----
+cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
+echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
 
 %files python
 %defattr(-,root,root,-)
-/usr/lib/python*/*
+/usr/lib/python2*/*
+/usr/lib/python3*/*
