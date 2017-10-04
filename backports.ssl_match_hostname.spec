@@ -6,7 +6,7 @@
 #
 Name     : backports.ssl_match_hostname
 Version  : 3.5.0.1
-Release  : 20
+Release  : 21
 URL      : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
 Source0  : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
 Source99 : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz.asc
@@ -14,6 +14,7 @@ Summary  : The ssl.match_hostname() function from Python 3.5
 Group    : Development/Tools
 License  : Python-2.0
 Requires: backports.ssl_match_hostname-legacypython
+Requires: backports.ssl_match_hostname-python3
 Requires: backports.ssl_match_hostname-python
 BuildRequires : pbr
 BuildRequires : pip
@@ -45,6 +46,7 @@ The ssl.match_hostname() function from Python 3.5
 %package legacypython
 Summary: legacypython components for the backports.ssl_match_hostname package.
 Group: Default
+Requires: python-core
 
 %description legacypython
 legacypython components for the backports.ssl_match_hostname package.
@@ -54,9 +56,19 @@ legacypython components for the backports.ssl_match_hostname package.
 Summary: python components for the backports.ssl_match_hostname package.
 Group: Default
 Requires: backports.ssl_match_hostname-legacypython
+Requires: backports.ssl_match_hostname-python3
 
 %description python
 python components for the backports.ssl_match_hostname package.
+
+
+%package python3
+Summary: python3 components for the backports.ssl_match_hostname package.
+Group: Default
+Requires: python3-core
+
+%description python3
+python3 components for the backports.ssl_match_hostname package.
 
 
 %prep
@@ -67,12 +79,12 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1505362142
+export SOURCE_DATE_EPOCH=1507149033
 python2 setup.py build -b py2
 python3 setup.py build -b py3
 
 %install
-export SOURCE_DATE_EPOCH=1505362142
+export SOURCE_DATE_EPOCH=1507149033
 rm -rf %{buildroot}
 python2 -tt setup.py build -b py2 install --root=%{buildroot} --force
 python3 -tt setup.py build -b py3 install --root=%{buildroot} --force
@@ -88,5 +100,8 @@ echo ----[ mark ]----
 /usr/lib/python2*/*
 
 %files python
+%defattr(-,root,root,-)
+
+%files python3
 %defattr(-,root,root,-)
 /usr/lib/python3*/*
