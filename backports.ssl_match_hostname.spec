@@ -6,7 +6,7 @@
 #
 Name     : backports.ssl_match_hostname
 Version  : 3.5.0.1
-Release  : 29
+Release  : 30
 URL      : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
 Source0  : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
 Source99 : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz.asc
@@ -14,10 +14,10 @@ Summary  : The ssl.match_hostname() function from Python 3.5
 Group    : Development/Tools
 License  : Python-2.0
 Requires: backports.ssl_match_hostname-python3
+Requires: backports.ssl_match_hostname-license
 Requires: backports.ssl_match_hostname-python
 BuildRequires : pbr
 BuildRequires : pip
-
 BuildRequires : python3-dev
 BuildRequires : setuptools
 
@@ -41,6 +41,14 @@ The ssl.match_hostname() function from Python 3.5
         This backport brings ``match_hostname()`` to users
         of earlier versions of Python.
         Simply make this distribution a dependency of your package,
+
+%package license
+Summary: license components for the backports.ssl_match_hostname package.
+Group: Default
+
+%description license
+license components for the backports.ssl_match_hostname package.
+
 
 %package python
 Summary: python components for the backports.ssl_match_hostname package.
@@ -68,11 +76,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1523285740
+export SOURCE_DATE_EPOCH=1529092218
 python3 setup.py build -b py3
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/backports.ssl_match_hostname
+cp backports/ssl_match_hostname/LICENSE.txt %{buildroot}/usr/share/doc/backports.ssl_match_hostname/backports_ssl_match_hostname_LICENSE.txt
 python3 -tt setup.py build -b py3 install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
@@ -80,6 +90,10 @@ echo ----[ mark ]----
 
 %files
 %defattr(-,root,root,-)
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/backports.ssl_match_hostname/backports_ssl_match_hostname_LICENSE.txt
 
 %files python
 %defattr(-,root,root,-)
