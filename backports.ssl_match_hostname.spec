@@ -17,7 +17,7 @@ Requires: backports.ssl_match_hostname-python3
 Requires: backports.ssl_match_hostname-python
 BuildRequires : pbr
 BuildRequires : pip
-BuildRequires : python-dev
+
 BuildRequires : python3-dev
 BuildRequires : setuptools
 
