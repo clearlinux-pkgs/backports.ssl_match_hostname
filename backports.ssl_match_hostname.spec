@@ -5,24 +5,21 @@
 # Source0 file verified with key 0x5FAC8089CD84EE48 (a.badger@gmail.com)
 #
 Name     : backports.ssl_match_hostname
-Version  : 3.5.0.1
-Release  : 38
-URL      : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
-Source0  : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz
-Source99 : http://pypi.debian.net/backports.ssl_match_hostname/backports.ssl_match_hostname-3.5.0.1.tar.gz.asc
+Version  : 3.7.0.1
+Release  : 39
+URL      : https://files.pythonhosted.org/packages/ff/2b/8265224812912bc5b7a607c44bf7b027554e1b9775e9ee0de8032e3de4b2/backports.ssl_match_hostname-3.7.0.1.tar.gz
+Source0  : https://files.pythonhosted.org/packages/ff/2b/8265224812912bc5b7a607c44bf7b027554e1b9775e9ee0de8032e3de4b2/backports.ssl_match_hostname-3.7.0.1.tar.gz
+Source1 : https://files.pythonhosted.org/packages/ff/2b/8265224812912bc5b7a607c44bf7b027554e1b9775e9ee0de8032e3de4b2/backports.ssl_match_hostname-3.7.0.1.tar.gz.asc
 Summary  : The ssl.match_hostname() function from Python 3.5
 Group    : Development/Tools
 License  : Python-2.0
-Requires: backports.ssl_match_hostname-python3
-Requires: backports.ssl_match_hostname-license
-Requires: backports.ssl_match_hostname-python
-BuildRequires : pbr
-BuildRequires : pip
-BuildRequires : python3-dev
-BuildRequires : setuptools
+Requires: backports.ssl_match_hostname-license = %{version}-%{release}
+Requires: backports.ssl_match_hostname-python = %{version}-%{release}
+Requires: backports.ssl_match_hostname-python3 = %{version}-%{release}
+BuildRequires : buildreq-distutils3
 
 %description
-The ssl.match_hostname() function from Python 3.5
+The ssl.match_hostname() function from Python 3.7
         =================================================
         
         The Secure Sockets Layer is only actually *secure*
@@ -53,7 +50,7 @@ license components for the backports.ssl_match_hostname package.
 %package python
 Summary: python components for the backports.ssl_match_hostname package.
 Group: Default
-Requires: backports.ssl_match_hostname-python3
+Requires: backports.ssl_match_hostname-python3 = %{version}-%{release}
 
 %description python
 python components for the backports.ssl_match_hostname package.
@@ -69,21 +66,28 @@ python3 components for the backports.ssl_match_hostname package.
 
 
 %prep
-%setup -q -n backports.ssl_match_hostname-3.5.0.1
+%setup -q -n backports.ssl_match_hostname-3.7.0.1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1529092218
-python3 setup.py build -b py3
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1570211359
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
+export MAKEFLAGS=%{?_smp_mflags}
+python3 setup.py build
 
 %install
+export MAKEFLAGS=%{?_smp_mflags}
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/backports.ssl_match_hostname
-cp backports/ssl_match_hostname/LICENSE.txt %{buildroot}/usr/share/doc/backports.ssl_match_hostname/backports_ssl_match_hostname_LICENSE.txt
-python3 -tt setup.py build -b py3 install --root=%{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/backports.ssl_match_hostname
+cp LICENSE.txt %{buildroot}/usr/share/package-licenses/backports.ssl_match_hostname/LICENSE.txt
+python3 -tt setup.py build  install --root=%{buildroot}
 echo ----[ mark ]----
 cat %{buildroot}/usr/lib/python3*/site-packages/*/requires.txt || :
 echo ----[ mark ]----
@@ -92,8 +96,8 @@ echo ----[ mark ]----
 %defattr(-,root,root,-)
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/backports.ssl_match_hostname/backports_ssl_match_hostname_LICENSE.txt
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/backports.ssl_match_hostname/LICENSE.txt
 
 %files python
 %defattr(-,root,root,-)
